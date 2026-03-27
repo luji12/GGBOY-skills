@@ -1,0 +1,18 @@
+{
+  "name": "dynamic-agent-system",
+  "leadAgentId": "5da380e3f0a749fd9997ed5f5c75b96d",
+  "workspacePath": "/Users/luji/WorkBuddy/20260327125856",
+  "createdAt": "2026-03-27T06:01:14.489Z",
+  "options": {
+    "workspacePath": "/Users/luji/WorkBuddy/20260327125856",
+    "isAutoTeam": false
+  },
+  "members": [
+    {
+      "memberId": "team-lead@dynamic-agent-system",
+      "name": "team-lead",
+      "role": "Team Lead - coordinates the team and interacts with the user"
+    }
+  ],
+  "isAutoTeam": false
+}
