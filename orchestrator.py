@@ -21,6 +21,7 @@ from agent_skills_config import (
     get_skills_for_agent,
     get_skill_by_capability,
     generate_skill_prompt,
+    get_skill_content,
     Skill
 )
 
@@ -30,11 +31,12 @@ class TaskStatus(Enum):
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     FAILED = "failed"
+    BLOCKED = "blocked"  # 借鉴ClawTeam：依赖未满足时阻塞
 
 
 @dataclass
 class SubTask:
-    """子任务定义"""
+    """子任务定义（借鉴ClawTeam任务管理机制）"""
     id: str
     description: str
     required_capability: str  # 所需能力，如 "coding", "design", "writing"
@@ -42,6 +44,21 @@ class SubTask:
     status: TaskStatus = TaskStatus.PENDING
     result: Any = None
     assigned_agent: Optional[str] = None
+    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
+    completed_at: Optional[str] = None
+    skill_content: Optional[str] = None  # 注入的实际Skill知识内容
+
+    def can_start(self, completed_ids: List[str]) -> bool:
+        """检查依赖是否满足，可以开始执行"""
+        return all(dep in completed_ids for dep in self.dependencies)
+
+    def mark_completed(self, result: Any = None):
+        self.status = TaskStatus.COMPLETED
+        self.result = result
+        self.completed_at = datetime.now().isoformat()
+
+    def mark_blocked(self):
+        self.status = TaskStatus.BLOCKED
 
 
 @dataclass
